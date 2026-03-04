@@ -3,6 +3,7 @@ from typing import Optional, List
 from playwright.sync_api import Page, Locator, expect
 import allure
 from ..base_element import BaseElement
+from src.utils.decorators import retry_on_condition
 
 
 class ContactTableRow(BaseElement):
@@ -77,7 +78,7 @@ class ContactsTable(BaseElement):
         table_locator = page.locator('table, [role="table"], [class*="table"]').first
         super().__init__(page, table_locator, 'Contacts Table')
 
-        self.refresh_button = self.page.get_by_role("button", name="Refresh").first
+
         # Reliable row selector - find rows with contact links
         self.rows = self.element_locator.locator('tr:has(a[href*="/account/contact/"])')
 
@@ -85,13 +86,6 @@ class ContactsTable(BaseElement):
     def type_of(self) -> str:
         """Gets the lowercase type of the element."""
         return 'table'
-
-    @allure.step
-    def click_refresh(self) -> None:
-        """Click the refresh button to reload the table."""
-        with allure.step('Click refresh button'):
-            self.refresh_button.wait_for(state='visible')
-            self.refresh_button.click()
 
     @allure.step
     def get_rows(self) -> List[ContactTableRow]:
@@ -138,9 +132,23 @@ class ContactsTable(BaseElement):
     def verify_contact_not_exists(self, contact_id: str) -> None:
         """Verify contact does not exist in table."""
         with allure.step(f'Verify contact {contact_id} does not exist in table'):
-            row = self.get_row_by_contact_id(contact_id)
-            if row:
-                raise AssertionError(f'Contact {contact_id} still exists in table')
+            # Wait for table to update (DOM refresh after delete)
+            self.page.wait_for_load_state('networkidle', timeout=10000)
+            self.page.wait_for_timeout(500)  # Additional wait for DOM updates
+
+            @retry_on_condition(
+                page=self.page,
+                max_retries=3,
+                wait_ms=1000,
+                condition_func=lambda row: row is not None
+            )
+            def _check_contact_deleted() -> Optional[ContactTableRow]:
+                """Returns None if contact is deleted, ContactTableRow if still exists."""
+                return self.get_row_by_contact_id(contact_id)
+
+            result = _check_contact_deleted()
+            if result:
+                raise AssertionError(f'Contact {contact_id} still exists in table after delete')
 
     @allure.step
     def get_row_count(self) -> int:

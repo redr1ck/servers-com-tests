@@ -24,6 +24,7 @@ class AccountSettingsPage(DashboardPage):
         self.url_path = "/account"
         self.page_heading = Heading(self.page, 'Account settings')
         self.edit_button = Button(self.page, 'Edit')
+        self.refresh_button = self.page.get_by_role("button", name="Refresh").first
         self.account_form = self.page.locator('text=/account|email|profile|settings/i').first
 
         # Subscriptions block elements - using flexible locators
@@ -84,6 +85,14 @@ class AccountSettingsPage(DashboardPage):
         with allure.step('Click Create button in Subscriptions block'):
             self.create_contact_button.wait_for(state='visible', timeout=10000)
             self.create_contact_button.click()
+
+    @allure.step
+    def click_refresh_table(self) -> None:
+        """Click the refresh button to reload the table."""
+        with allure.step('Click refresh button'):
+            self.refresh_button.wait_for(state='visible')
+            self.refresh_button.click(force=True)
+
 
     @allure.step
     def get_contact_row(self, contact_id: str) -> Optional[ContactTableRow]:
