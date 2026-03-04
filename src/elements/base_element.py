@@ -13,7 +13,7 @@ class BaseElement(ABC):
         page: Page, 
         element_locator: Locator, 
         name: Optional[str] = None
-    ):
+    ) -> None:
         """
         Initialize a BaseElement.
         
@@ -77,7 +77,9 @@ class BaseElement(ABC):
     def should_be_enabled(self) -> None:
         """Asserts that the element is enabled."""
         with allure.step(f'Checking if the {self.type_of} with name "{self.component_name}" is enabled'):
-            self.element_locator.wait_for(state='enabled')
+            from playwright.sync_api import expect
+            self.element_locator.wait_for(state='visible')
+            expect(self.element_locator).to_be_enabled()
 
     @allure.step
     def wait_for_visible(self) -> None:

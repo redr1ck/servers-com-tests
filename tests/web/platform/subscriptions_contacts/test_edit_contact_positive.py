@@ -1,11 +1,11 @@
 """Edit contact positive scenario test."""
 import allure
-import pytest
 import re
 from playwright.sync_api import Page, expect
 
 from src.pages.platform.account_settings_page import AccountSettingsPage
 from src.utils.generic import generate_contact_form_data
+from src.models.contac_form import ContactFormData
 
 
 @allure.epic("Subscriptions")
@@ -13,7 +13,10 @@ from src.utils.generic import generate_contact_form_data
 @allure.story("Edit Contact")
 @allure.title("Edit Contact - Positive Scenario (Update All Fields)")
 @allure.description("Test editing an existing contact with new data in all fields")
-def test_edit_contact_positive_scenario(authorized_page, create_contact_and_cleanup):
+def test_edit_contact_positive_scenario(
+    authorized_page: Page,
+    create_contact_and_cleanup: tuple[str, ContactFormData],
+) -> None:
     """Test editing an existing contact with new data."""
     page = authorized_page
     contact_id, _ = create_contact_and_cleanup
@@ -79,8 +82,8 @@ def test_edit_contact_positive_scenario(authorized_page, create_contact_and_clea
     with allure.step("Submit the form by clicking Save button"):
         contact_form.click_save()
         # Expect navigation to /account/contact/<contactId> page
-        page.wait_for_url(re.compile(r".*\/account\/contact\/\d+"))
-    
+        page.wait_for_url(re.compile(r".*/account/contact/\d+"))
+
     # Step 4: Verify the updated data is saved correctly
     with allure.step("Verify updated data is saved correctly in View form"):
         view_form.should_be_visible()
@@ -96,4 +99,3 @@ def test_edit_contact_positive_scenario(authorized_page, create_contact_and_clea
     with allure.step("Verify updated contact displays correctly in Subscriptions table"):
         if contact_id:
             account_page.verify_contact_in_table(str(contact_id))
-    

@@ -1,13 +1,14 @@
 """Button element class."""
-from playwright.sync_api import Page, Locator
+from playwright.sync_api import Page
 import allure
 from .base_element import BaseElement
+from typing import Optional
 
 
 class Button(BaseElement):
     """Represents a button element."""
 
-    def __init__(self, page: Page, name: str, selector: str = None):
+    def __init__(self, page: Page, name: str, selector: Optional[str] = None) -> None:
         """
         Initialize a Button element.
         
@@ -39,4 +40,8 @@ class Button(BaseElement):
     def wait_for_enabled(self) -> None:
         """Wait for button to be enabled."""
         with allure.step(f'Wait for {self.type_of} "{self.component_name}" to be enabled'):
-            self.element_locator.wait_for(state='enabled')
+            # Note: Playwright's wait_for() only supports 'attached', 'detached', 'hidden', 'visible'
+            # For enabled check, use is_enabled() or expect()
+            from playwright.sync_api import expect
+            self.element_locator.wait_for(state='visible')
+            expect(self.element_locator).to_be_enabled()

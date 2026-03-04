@@ -11,7 +11,7 @@ from src.pages.platform.account_settings_page import AccountSettingsPage
 @allure.story("Delete Contact")
 @allure.title("Delete Contact - Positive Scenario")
 @allure.description("Test deleting an existing contact from the subscriptions table")
-def test_delete_contact_positive_scenario(authorized_page: Page, create_contact):
+def test_delete_contact_positive_scenario(authorized_page: Page, create_contact: str) -> None:
     """Test deleting an existing contact."""
     account_page = AccountSettingsPage(authorized_page)
     confirmation_dialog = Dialog(authorized_page)

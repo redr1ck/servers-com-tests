@@ -7,8 +7,7 @@ import allure
 from .cloud_storage_submenu import CloudStorageSubMenu
 from ..base_element import BaseElement
 from .menu_item import MenuItem
-from .submenu import SubMenu
-from .menu_item_config import MenuItemConfig, MENU_ITEMS
+from .menu_item_config import MENU_ITEMS
 from .monitoring_submenu import MonitoringSubMenu
 from .identity_and_access_submenu import IdentityAndAccessSubMenu
 from .billing_submenu import BillingSubMenu
@@ -21,7 +20,7 @@ from .reports_submenu import ReportsSubMenu
 class SideMenu(BaseElement):
     """Represents the side navigation menu element."""
 
-    def __init__(self, page: Page):
+    def __init__(self, page: Page) -> None:
         """
         Initialize a SideMenu element.
 
@@ -236,4 +235,3 @@ class SideMenu(BaseElement):
             submenu.wait_for(state='visible')
             items = submenu.locator('> li').all_text_contents()
             return [item.strip() for item in items if item.strip()]
-

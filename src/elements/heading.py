@@ -1,6 +1,6 @@
 """Heading element class."""
 from typing import Optional
-from playwright.sync_api import Page, Locator, expect
+from playwright.sync_api import Page, expect
 import allure
 from .base_element import BaseElement
 
@@ -8,7 +8,7 @@ from .base_element import BaseElement
 class Heading(BaseElement):
     """Represents a heading element (h1, h2, etc.)."""
 
-    def __init__(self, page: Page, name: str, heading_text: Optional[str] = None):
+    def __init__(self, page: Page, name: str, heading_text: Optional[str] = None) -> None:
         """
         Initialize a Heading element.
         

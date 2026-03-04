@@ -5,7 +5,8 @@ from src.models.contac_form import ContactFormData
 
 fake = Faker()
 
-def phone_9_15_digits():
+def phone_9_15_digits() -> str:
+    """Generate phone number with 9-15 digits."""
     n = fake.random_int(min=9, max=15)
     # первая цифра не 0, остальные любые
     first = str(fake.random_int(min=1, max=9))
@@ -45,4 +46,3 @@ def generate_contact_form_data() -> ContactFormData:
         is_abuse=True,
     )
 # Technical, Billing, Emergency, Abuse - role ID 142 (all roles)
-

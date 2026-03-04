@@ -11,9 +11,9 @@ from src.pages.platform.dashboard_page import DashboardPage
 @allure.story("Logout Process")
 @allure.title("Successful Logout Flow")
 @allure.description("Test successful logout process from dashboard to login page")
-def test_successful_logout_flow(authorized_page: Page, page: Page) -> None:
+def test_successful_logout_flow(authorized_page: Page) -> None:
     """Test successful logout from dashboard to login page."""
-    page, _ = authorized_page
+    page = authorized_page
     dashboard_page = DashboardPage(page)
     dashboard_page.open()
 

@@ -17,7 +17,7 @@ from loguru import logger as _loguru_logger
 class Logger:
     """
     Singleton logger wrapper around loguru.
-    
+    делай та
     Usage:
         logger = Logger()
         logger.info("Message")
@@ -34,16 +34,11 @@ class Logger:
     @classmethod
     def _setup_default(cls) -> None:
         """Setup default logger configuration"""
-        # Remove default handler
+        # Remove default handler (no console output)
         cls._instance.remove()
         
-        # Add console handler with format
-        cls._instance.add(
-            sink=lambda msg: print(msg, end=""),
-            format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-            level="INFO",
-        )
-    
+        # Don't add any default sink - logs will only be captured by test fixtures
+
     def __getattr__(self, name: str):
         """Delegate all attribute access to the underlying logger instance"""
         return getattr(self.__class__._instance, name)

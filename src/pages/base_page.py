@@ -1,5 +1,6 @@
 import allure
 from abc import ABC, abstractmethod
+import re
 from playwright.sync_api import Page, Locator, expect
 
 from src.utils.config_loader import get_test_config
@@ -151,6 +152,16 @@ class BasePage(ABC):
     def should_have_title(self, title: str) -> None:
         with allure.step(f"Assert page title is '{title}'"):
             expect(self.page).to_have_title(title)
+
+    # ── URL Verification ───────────────────────────────────────────────────────
+
+    def verify_url(self, expected_path: str) -> None:
+        with allure.step(f"Verify URL contains '{expected_path}'"):
+            current_url = self.get_current_url()
+            assert re.search(expected_path, current_url), (
+                f"Expected URL to contain '{expected_path}', "
+                f"but got '{current_url}'"
+            )
 
     # ── Screenshots ───────────────────────────────────────────────────────────
 

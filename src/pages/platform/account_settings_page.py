@@ -4,7 +4,7 @@ from playwright.sync_api import Page, Locator
 import allure
 
 from .dashboard_page import DashboardPage
-from src.elements import Heading, Button, MENU_ITEMS
+from src.elements import Heading, Button
 from src.elements.contact import ContactsTable, ContactTableRow, ContactInformationForm, ViewContactInfoForm
 
 
@@ -13,7 +13,7 @@ class AccountSettingsPage(DashboardPage):
     URL: /account
     """
 
-    def __init__(self, page: Page):
+    def __init__(self, page: Page) -> None:
         """
         Initialize AccountSettingsPage.
         
@@ -22,23 +22,23 @@ class AccountSettingsPage(DashboardPage):
         """
         super().__init__(page)
         self.url_path = "/account"
-        self.page_heading = Heading(page, 'Account settings')
-        self.edit_button = Button(page, 'Edit')
-        self.account_form = page.locator('text=/account|email|profile|settings/i').first
+        self.page_heading = Heading(self.page, 'Account settings')
+        self.edit_button = Button(self.page, 'Edit')
+        self.account_form = self.page.locator('text=/account|email|profile|settings/i').first
 
         # Subscriptions block elements - using flexible locators
         # Find the Subscriptions section by heading
-        self.subscriptions_block = page.locator('section, div').filter(
-            has=page.get_by_role('heading', name='Subscriptions').first
+        self.subscriptions_block = self.page.locator('section, div').filter(
+            has=self.page.get_by_role('heading', name='Subscriptions').first
         ).first
         
         # Create button is specifically in the Subscriptions block
         self.create_contact_button = self.subscriptions_block.get_by_role('button', name='Create').first
-        self.contacts_table = ContactsTable(page)
-        
+        self.contacts_table = ContactsTable(self.page)
+
         # Forms
-        self.contact_information_form = ContactInformationForm(page)
-        self.view_contact_info_form = ViewContactInfoForm(page)
+        self.contact_information_form = ContactInformationForm(self.page)
+        self.view_contact_info_form = ViewContactInfoForm(self.page)
 
     def open(self) -> None:
         """Open Account Settings page."""
@@ -131,4 +131,3 @@ class AccountSettingsPage(DashboardPage):
             if not row:
                 raise ValueError(f'Contact {contact_id} not found in table')
             return row.delete_button
-

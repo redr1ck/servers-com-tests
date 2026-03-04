@@ -1,6 +1,7 @@
 import pytest
 import allure
 from src.pages.login_page import LoginPage
+from tests.web.conftest import login_page
 
 
 @allure.feature("Login")
@@ -18,13 +19,20 @@ class TestFieldValidation:
         ],
         ids=["no_at_symbol", "multiple_at", "too_long"]
     )
-    def test_email_validation(self, login_page, page, email, description, expected_error):
+    def test_email_validation(
+        self,
+        login_page: LoginPage,
+        email: str,
+        description: str,
+        expected_error: str,
+    ) -> None:
         """1.6 Email field validation with various invalid formats"""
         # Reload to ensure clean state for each parameter
-        page.reload()
-        page.wait_for_load_state("networkidle")
-        page.goto("https://portal.servers.com/login")
-        page.wait_for_load_state("networkidle")
+        # login_page = LoginPage(page)
+        # login_page.reload()
+        # login_page.wait_for_load_state("networkidle")
+        # login_page.open()
+        # login_page.wait_for_load_state("networkidle")
 
         with allure.step(f"Enter {description}: {email[:30]}..."):
             # Fill email with invalid value
@@ -48,13 +56,19 @@ class TestFieldValidation:
         ],
         ids=["too_short", "too_long"]
     )
-    def test_password_validation(self, login_page, page, password, description, expected_error):
+    def test_password_validation(
+        self,
+        login_page: LoginPage,
+        password: str,
+        description: str,
+        expected_error: str,
+    ) -> None:
         """1.7 Password field validation"""
         # Reload to ensure clean state for each parameter
-        page.reload()
-        page.wait_for_load_state("networkidle")
-        page.goto("https://portal.servers.com/login")
-        page.wait_for_load_state("networkidle")
+        # page.reload()
+        # page.wait_for_load_state("networkidle")
+        # page.goto("https://portal.servers.com/login")
+        # page.wait_for_load_state("networkidle")
 
         with allure.step(f"Enter {description}"):
             # Fill password with invalid value
@@ -70,7 +84,10 @@ class TestFieldValidation:
             login_page.verify_field_error_tooltip("password", expected_error)
 
     @allure.title("Валидация email 'n@l.' - точка в неправильной позиции")
-    def test_email_validation_dot_at_wrong_position(self, login_page, page):
+    def test_email_validation_dot_at_wrong_position(
+        self,
+        login_page: LoginPage,
+    ) -> None:
         """Email validation: '.' is used at a wrong position"""
         invalid_email = "n@l."
 

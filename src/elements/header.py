@@ -1,5 +1,5 @@
 """Header element class."""
-from playwright.sync_api import Page, Locator
+from playwright.sync_api import Page
 import allure
 from .base_element import BaseElement
 
@@ -7,7 +7,7 @@ from .base_element import BaseElement
 class Header(BaseElement):
     """Represents the main navigation header (<nav>) element."""
 
-    def __init__(self, page: Page):
+    def __init__(self, page: Page) -> None:
         """
         Initialize a Header element.
         

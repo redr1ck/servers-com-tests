@@ -1,8 +1,7 @@
 """Create contact positive scenario test."""
 import allure
-import pytest
 import re
-from playwright.sync_api import expect
+from playwright.sync_api import Page, expect
 
 from src.pages.platform.account_settings_page import AccountSettingsPage
 from src.utils.generic import generate_contact_form_data
@@ -13,7 +12,7 @@ from src.utils.generic import generate_contact_form_data
 @allure.story("Create Contact")
 @allure.title("Create Contact - Positive Scenario (All Fields and Checkboxes)")
 @allure.description("Test creating a contact with all fields filled and checkboxes selected")
-def test_create_contact_positive_scenario(authorized_page, cleanup_contacts: list):
+def test_create_contact_positive_scenario(authorized_page: Page, cleanup_contacts: list[str]) -> None:
     """Test creating a contact with all fields filled."""
     page = authorized_page
     account_page = AccountSettingsPage(page)
@@ -29,7 +28,7 @@ def test_create_contact_positive_scenario(authorized_page, cleanup_contacts: lis
     with allure.step("Click Create button in Subscriptions block"):
         account_page.click_create_contact()
         # Expect navigation to /account/new-contact page
-        expect(page).to_have_url(re.compile(r'.*\/account\/new-contact'))
+        expect(page).to_have_url(re.compile(r'.*/account/new-contact'))
 
     # Step 2: Generate test data and fill all fields
     contact_data = generate_contact_form_data()
@@ -81,11 +80,11 @@ def test_create_contact_positive_scenario(authorized_page, cleanup_contacts: lis
     # Step 4: Verify successful creation and navigation to contact details page
     with allure.step("Verify successful contact creation"):
         # Should navigate to /account/contact/<id> page
-        expect(page).to_have_url(re.compile(r'.*\/account\/contact\/\d+'))
+        expect(page).to_have_url(re.compile(r'.*/account/contact/\d+'))
 
         # Extract contact ID from URL for cleanup
         current_url = page.url
-        match = re.search(r'\/account\/contact\/(\d+)', current_url)
+        match = re.search(r'/account/contact/(\d+)', current_url)
         if match:
             created_contact_id = match.group(1)
             cleanup_contacts.append(created_contact_id)

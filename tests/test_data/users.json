@@ -1,0 +1,9 @@
+{
+  "users": [
+    {
+      "email": "test@servers.com",
+      "password": "123456789",
+      "accountId": "0000000"
+    }
+  ]
+}

@@ -1,13 +1,14 @@
 """Contact information form element class."""
-from playwright.sync_api import Page, Locator
+from playwright.sync_api import Page
 import allure
 from ..base_element import BaseElement
 from src.models.contac_form import ContactFormData
 
+
 class ContactInformationForm(BaseElement):
     """Represents the contact information form on /account/new-contact and /account/contact/<id> pages."""
 
-    def __init__(self, page: Page):
+    def __init__(self, page: Page) -> None:
         """
         Initialize a ContactInformationForm element.
         

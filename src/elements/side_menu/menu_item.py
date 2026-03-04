@@ -8,7 +8,7 @@ from .menu_item_config import MenuItemConfig
 class MenuItem(BaseElement):
     """Represents a single menu item."""
 
-    def __init__(self, page: Page, locator: Locator, config: MenuItemConfig):
+    def __init__(self, page: Page, locator: Locator, config: MenuItemConfig) -> None:
         super().__init__(page, locator, config.name)
         self.config = config
 
@@ -37,4 +37,3 @@ class MenuItem(BaseElement):
         """Verify menu item is not visible."""
         with allure.step(f'Verify "{self.config.name}" is not visible'):
             self.element_locator.wait_for(state='hidden', timeout=5000)
-

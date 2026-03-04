@@ -27,7 +27,7 @@ def _load_config() -> TestConfig:
     """Load configuration from environment variables"""
     # Web configuration
     web_config = None
-    web_base_url = os.getenv('WEB_BASE_URL')
+    web_base_url = os.getenv('WEB_BASE_URL', "https://portal.servers.com")
     if web_base_url:
         web_config = WebConfig(base_url=web_base_url)
 

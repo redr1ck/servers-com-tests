@@ -12,18 +12,17 @@ class DashboardPage(BasePage):
     """Base class for dashboard pages.
     """
 
-    def __init__(self, page: Page):
+    def __init__(self, page: Page) -> None:
         """
         Initialize a DashboardPage.
         
         Args:
             page: The Playwright Page object
-            user_id: The user ID for session-aware URLs
         """
         super().__init__(page)
         self.header = Header(self.page)
         self.side_menu = SideMenu(self.page)
-        self.url_path = "/dashboard"
+        self.url_path: str = "/dashboard"
 
         # Dashboard elements
         self.dashboard_text = self.page.get_by_text('dashboard')
@@ -32,7 +31,7 @@ class DashboardPage(BasePage):
     def get_session_prefix(self) -> Optional[str]:
         """Get session prefix from current URL."""
         current_url = self.page.url
-        match = re.search(r'(\/a:[^\/]+)\/', current_url)
+        match = re.search(r'(/a:[^/]+)/', current_url)
         return match.group(1) if match else None
 
     @allure.step
@@ -82,24 +81,3 @@ class DashboardPage(BasePage):
                 self.page.wait_for_timeout(500)
             except:
                 pass  # No popup found, continue
-
-    @allure.step
-    def verify_url(self, url_pattern: str) -> None:
-        """Verify page URL matches pattern."""
-        with allure.step('Verify page URL'):
-            current_url = self.page.url
-            pattern = re.compile(url_pattern)
-            if not pattern.search(current_url):
-                raise AssertionError(f'URL {current_url} does not match pattern {url_pattern}')
-
-    @allure.step
-    def verify_header_visible(self) -> None:
-        """Verify header is visible on the page."""
-        with allure.step('Verify Header is visible'):
-            self.header.should_be_visible()
-
-    @allure.step
-    def verify_side_menu_visible(self) -> None:
-        """Verify side menu is visible on the page."""
-        with allure.step('Verify Side Menu is visible'):
-            self.side_menu.should_be_visible()
