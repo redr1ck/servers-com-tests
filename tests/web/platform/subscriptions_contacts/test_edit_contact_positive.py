@@ -97,5 +97,4 @@ def test_edit_contact_positive_scenario(
     
     # Step 6: Verify the updated contact displays correctly in the Subscriptions table
     with allure.step("Verify updated contact displays correctly in Subscriptions table"):
-        if contact_id:
-            account_page.verify_contact_in_table(str(contact_id))
+        account_page.verify_contact_in_table(str(contact_id))

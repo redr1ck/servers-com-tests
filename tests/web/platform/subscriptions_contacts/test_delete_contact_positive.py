@@ -36,4 +36,5 @@ def test_delete_contact_positive_scenario(authorized_page: Page, create_contact:
     
     # Step 4: Verify the contact no longer appears in the Subscriptions table
     with allure.step("Verify contact is removed from Subscriptions table"):
+        account_page.contacts_table.click_refresh()
         account_page.verify_contact_not_in_table(contact_id)

@@ -6,6 +6,7 @@ import json
 import random
 from pathlib import Path
 from io import StringIO
+from typing import Dict, Any
 
 import pytest
 import allure
@@ -17,6 +18,29 @@ from src.utils.logger import Logger
 # Initialize logger
 logger = Logger()
 
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """Add custom pytest CLI options"""
+    parser.addoption(
+        "--proxy",
+        action="store",
+        default=None,
+        help="Use proxy server. Provide address (e.g., 'socks5://127.0.0.1:9050'). "
+             "Example: pytest --proxy='socks5://127.0.0.1:9050'",
+    )
+
+
+@pytest.fixture(scope="session")
+def context_args(pytestconfig: pytest.Config) -> Dict[str, Any]:
+    """Configure context options with optional proxy"""
+    args: Dict[str, Any] = {
+        "viewport": {"width": 1920, "height": 1080},
+    }
+
+    proxy_server = pytestconfig.getoption("--proxy")
+    if proxy_server:
+        args["proxy"] = {"server": proxy_server}
+
+    return args
 
 @pytest.fixture(scope="function", autouse=True)
 def capture_logs_to_allure(request: pytest.FixtureRequest):

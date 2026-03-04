@@ -4,7 +4,7 @@
 
 ### О проекте
 
-Проект содержит автоматизированные UI-тесты для платформы Servers.com на стеке **Python + Pytest + Playwright (sync API) + Allure**.
+Проект содержит автоматизированные UI-тесты для платформы Servers.com на стеке **Python (3.14.3) + Pytest + Playwright (sync API) + Allure**.
 
 Тесты организованы по Page Object паттерну, а часть операций выполняется через API-запросы (например, авторизация и подготовка данных) для ускорения и стабилизации сценариев.
 
@@ -35,25 +35,11 @@ servers-com-tests/
 
 #### 1) Подготовить окружение
 
-macOS:
-
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m pip install allure-pytest
-python -m playwright install chromium
-```
-
-Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pip install allure-pytest
 python -m playwright install --with-deps chromium
 ```
 
@@ -158,7 +144,7 @@ allure open allure-report
 
 ### About the Project
 
-This repository contains automated UI tests for the Servers.com platform using **Python + Pytest + Playwright (sync API) + Allure**.
+This repository contains automated UI tests for the Servers.com platform using **Python (3.14.3) + Pytest + Playwright (sync API) + Allure**.
 
 Tests follow the Page Object pattern, and some operations are done via API requests (for example, login and test data setup) to improve stability and execution speed.
 
@@ -189,25 +175,11 @@ servers-com-tests/
 
 #### 1) Prepare environment
 
-macOS:
-
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m pip install allure-pytest
-python -m playwright install chromium
-```
-
-Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pip install allure-pytest
 python -m playwright install --with-deps chromium
 ```
 

@@ -77,6 +77,7 @@ class ContactsTable(BaseElement):
         table_locator = page.locator('table, [role="table"], [class*="table"]').first
         super().__init__(page, table_locator, 'Contacts Table')
 
+        self.refresh_button = self.page.get_by_role("button", name="Refresh").first
         # Reliable row selector - find rows with contact links
         self.rows = self.element_locator.locator('tr:has(a[href*="/account/contact/"])')
 
@@ -84,6 +85,13 @@ class ContactsTable(BaseElement):
     def type_of(self) -> str:
         """Gets the lowercase type of the element."""
         return 'table'
+
+    @allure.step
+    def click_refresh(self) -> None:
+        """Click the refresh button to reload the table."""
+        with allure.step('Click refresh button'):
+            self.refresh_button.wait_for(state='visible')
+            self.refresh_button.click()
 
     @allure.step
     def get_rows(self) -> List[ContactTableRow]:

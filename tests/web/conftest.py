@@ -18,35 +18,12 @@ _config = get_test_config()
 BASE_URL: str = _config.web.base_url if _config.web else "https://portal.servers.com"
 
 
-def pytest_addoption(parser: pytest.Parser) -> None:
-    """Add custom pytest CLI options"""
-    parser.addoption(
-        "--proxy",
-        action="store",
-        default=None,
-        help="Use proxy server. Provide address (e.g., 'socks5://127.0.0.1:9050'). "
-             "Example: pytest --proxy='socks5://127.0.0.1:9050'",
-    )
-
 @pytest.fixture(autouse=True)
 def global_playwright_timeouts(page: Page) -> None:
     """Set global timeouts for Playwright actions"""
     page.set_default_timeout(40_000)
     page.set_default_navigation_timeout(40_000)
     expect.set_options(timeout=20_000)
-
-@pytest.fixture(scope="session")
-def context_args(pytestconfig: pytest.Config) -> Dict[str, Any]:
-    """Configure context options with optional proxy"""
-    args: Dict[str, Any] = {
-        "viewport": {"width": 1920, "height": 1080},
-    }
-    
-    proxy_server = pytestconfig.getoption("--proxy")
-    if proxy_server:
-        args["proxy"] = {"server": proxy_server}
-    
-    return args
 
 @pytest.fixture(scope="session")
 def browser_context_args(
