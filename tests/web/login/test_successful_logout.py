@@ -3,7 +3,7 @@ import allure
 from playwright.sync_api import Page, expect
 
 from src.pages.login_page import LoginPage
-from src.pages.platform import DashboardPage
+from src.pages.platform.dashboard_page import DashboardPage
 
 
 @allure.epic("Authentication")
